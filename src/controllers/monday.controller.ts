@@ -2,7 +2,7 @@ import mondaySdk from "monday-sdk-js";
 import { Request, Response } from "express";
 import Dotenv from "dotenv";
 import util from "util";
-import { Workspace, Column, Board, ColumnSettings, ColumnValue, ItemsPage, Item, StatusLabel } from "../interfaces/monday.interface";
+import { MondayResponse } from "../interfaces/monday.interface";
 
 Dotenv.config();
 
@@ -55,17 +55,13 @@ export const functionTest = async (req: Request, res: Response) => {
 
     const response = await monday.api(query);
 
-    const workspace: Workspace = response.data;
+    const workspace: MondayResponse = response.data;
     
-    if (!response || workspace.boards.length == 0) {
+    if (!response || workspace.boards.length == 0 || workspace.workspaces.length == 0) {
         return res.status(400).json("No se han encontrado datos coincidentes con la consulta realizada");
     };
 
-    if(workspace.boards.length > 0){
-      workspace.boards[0].columns.forEach(group =>{
-        console.log(group);
-      });
-    }
+    console.log(workspace);
 
     return res.status(200).json(workspace);
 
