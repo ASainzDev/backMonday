@@ -1,7 +1,6 @@
 import mondaySdk from "monday-sdk-js";
 import { Request, Response } from "express";
 import Dotenv from "dotenv";
-import util from "util";
 import { MondayResponse } from "../interfaces/monday.interface";
 import { createInitialQuery, createItemMutation } from "../services/mainboardquery.service";
 
@@ -40,6 +39,16 @@ export const createItemFunction = async (req: Request, res: Response) => {
 
   const mutation = createItemMutation();
 
+//   {
+//     "board_id": 5094296373,
+//     "group_id": "topics",
+//     "item_name": "prueba mutation backend",
+//     "column_values": {
+//         "text_mm274e55":"pepe@mail.com",
+//         "numeric_mm27yp1s": "12890"
+//     }
+// }    Ejemplo de estructura de un objeto json pasado desde postman para crearse en el tablero.
+
   const variables = {
     board_id: board_id,
     group_id: group_id,
@@ -54,6 +63,7 @@ export const createItemFunction = async (req: Request, res: Response) => {
       return res.status(400).json("No se ha podido crear el item indicado");
     }
 
+    // La respuesta devuelve la id del nuevo objeto. Hay que asegurarse que se quede asociada al nuevo objeto, aunque con una nueva query nos sirve.
     res.status(201).json(response);
   }catch (error){
       return res.status(500).json("Ha ocurrido un error inesperado a la hora de crear el item indicado.")
