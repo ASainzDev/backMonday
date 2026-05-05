@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import Dotenv from "dotenv";
 import util from "util";
 import { MondayResponse } from "../interfaces/monday.interface";
+import { createInitialQuery, createItemMutation } from "../services/mainboardquery.service";
 
 Dotenv.config();
 
@@ -12,45 +13,9 @@ monday.setToken(process.env.APP_TOKEN || "");
 
 export const functionTest = async (req: Request, res: Response) => {
 
-    const query = `query{
-  workspaces(ids: 5974062) {
-    id
-    name
-  }
-    boards (ids: 5094296373){
-      id
-      name
-      type
-    	groups{
-        id
-        title
-        color
-      }
-      columns {
-        id
-        title
-        type
-        settings
-      }
-      items_page {
-        cursor
-        items {
-          id
-          name
-          group {
-            id
-          }
-          column_values {
-            id
-            text
-            type
-            value
-          }
-        }
-      }
-    }
-  }
-`;
+  const boardId = req.body; //Aquí debería de venir, de saberse, el id del board a buscar.
+
+    const query = createInitialQuery(boardId);
 
 
     const response = await monday.api(query);
@@ -64,5 +29,34 @@ export const functionTest = async (req: Request, res: Response) => {
     console.log(workspace);
 
     return res.status(200).json(workspace);
+
+}
+
+export const createItemFunction = async (req: Request, res: Response) => {
+
+  const {board_id, group_id, item_name} = req.body;
+
+    const column_values = JSON.stringify(req.body.column_values);
+
+  const mutation = createItemMutation();
+
+  const variables = {
+    board_id: board_id,
+    group_id: group_id,
+    item_name: item_name,
+    column_values: column_values
+  }
+
+  try{
+    const response = await monday.api(mutation, {variables});
+
+    if(!response){
+      return res.status(400).json("No se ha podido crear el item indicado");
+    }
+
+    res.status(201).json(response);
+  }catch (error){
+      return res.status(500).json("Ha ocurrido un error inesperado a la hora de crear el item indicado.")
+  }
 
 }
