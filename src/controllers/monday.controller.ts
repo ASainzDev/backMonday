@@ -12,9 +12,9 @@ monday.setToken(process.env.APP_TOKEN || "");
 
 export const functionTest = async (req: Request, res: Response) => {
 
-  const boardId = req.body; //Aquí debería de venir, de saberse, el id del board a buscar.
+  const {board_id} = req.body; //Aquí debería de venir, de saberse, el id del board a buscar.
 
-    const query = createInitialQuery(boardId);
+    const query = createInitialQuery(board_id);
 
 
     const response = await monday.api(query);
