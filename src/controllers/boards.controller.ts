@@ -1,6 +1,6 @@
 import { Request, Response} from 'express';
 import mondaySdk from 'monday-sdk-js';
-import { boardsOfAWorkspace } from '../services/workspacesQuery.service';
+import { boardContent, boardsOfAWorkspace } from '../services/workspacesQuery.service';
 import Dotenv from 'dotenv';
 
 Dotenv.config();
@@ -19,11 +19,7 @@ export const getBoardsOfAWorkspace = async (req: Request, res: Response) => {
 
         const data = await monday.api(query);
 
-        console.log(data);
-
         const boards = data.data.boards;
-
-        console.log(boards);
 
         if(!boards){
             return res.status(200).json("Petición correcta, pero no se ha encontrado ningún resultado");
@@ -32,6 +28,29 @@ export const getBoardsOfAWorkspace = async (req: Request, res: Response) => {
         return res.status(200).json(boards);
 
     }catch(error){
-        res.status(500).json("Ha ocurrido un error al hacer la transaccion " + JSON.stringify(error));
+        return res.status(500).json("Ha ocurrido un error al hacer la transaccion " + JSON.stringify(error));
+    }
+}
+
+export const getBoardContent = async (req: Request, res: Response) => {
+
+    const board_id = req.body.board_id;
+
+    const query = boardContent(board_id);
+
+    try{
+
+        const data = await monday.api(query);
+
+        if(!data){
+            return res.status(200).json("Petición Correcta. No se han encontrado datos del elemento buscado");
+        };
+
+        const boardData = data.data.boards;
+
+        return res.status(200).json(boardData);
+
+    }catch(error){
+        return res.status(500).json("Ha ocurrido un error al realizar la petición " + error);
     }
 }

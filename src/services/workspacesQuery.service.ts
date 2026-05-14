@@ -30,3 +30,33 @@ export const boardsOfAWorkspace = (workspace_ids: number) => {
 
     return query;
 }
+
+export const boardContent = (board_ids: number) => {
+    const query = `query{
+                        boards(ids: ${board_ids}) {
+                            groups {
+                            id
+                            items_page {
+                                cursor
+                                items {
+                                id
+                                column_values {
+                                    id
+                                    text
+                                    type
+                                    value
+                                }
+                                }
+                            }
+                            }
+                            columns {
+                            id
+                            type
+                            title
+                            settings
+                            }
+                    }
+                }`;
+
+        return query;
+}
