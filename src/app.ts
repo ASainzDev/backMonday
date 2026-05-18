@@ -22,5 +22,4 @@ app.use("/monday", routerMonday);
 app.use("/monday", deleteColumn);
 
 app.use("/monday", boardRouter);
-
 app.listen(3000, () => console.log("Servidor escuchando en el puerto 3000"));

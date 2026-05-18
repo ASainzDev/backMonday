@@ -68,5 +68,4 @@ export const createItemFunction = async (req: Request, res: Response) => {
   }catch (error){
       return res.status(500).json("Ha ocurrido un error inesperado a la hora de crear el item indicado.")
   }
-
 }

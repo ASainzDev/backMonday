@@ -17,7 +17,6 @@ export const getAllWorkspaces = async (req: Request, res: Response) => {
         if(!data){
             return res.status(200).json("La query es correcta pero no ha devuelto resultados");
         };
-
         const workspaces = data.data.workspaces;
 
         res.status(200).json(workspaces);

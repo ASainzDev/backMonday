@@ -45,7 +45,6 @@ export const getBoardContent = async (req: Request, res: Response) => {
         if(!data){
             return res.status(200).json("Petición Correcta. No se han encontrado datos del elemento buscado");
         };
-
         const boardData = data.data.boards[0];
 
         return res.status(200).json(boardData);
