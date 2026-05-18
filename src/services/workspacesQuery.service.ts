@@ -36,10 +36,13 @@ export const boardContent = (board_ids: number) => {
                         boards(ids: ${board_ids}) {
                             groups {
                             id
+                            title
+                            color
                             items_page {
                                 cursor
                                 items {
                                 id
+                                name
                                 column_values {
                                     id
                                     text
